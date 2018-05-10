@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import './Navigate.css'
+import './Navigate.css';
 
 const Navigate = () => {
     return (
