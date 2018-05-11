@@ -58,6 +58,8 @@ class PostContainers extends Component {
     }
 
     render() {
+        const{postId, fetching, post, comments} = this.state;
+
         return (
             <PostWrapper>
                 <Navigate
