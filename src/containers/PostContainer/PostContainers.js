@@ -28,34 +28,52 @@ class PostContainers extends Component {
             fetching: true  // requesting...
         })
 
-        // 효율적인 비동기 요청
-        const info = await Promise.all([
-            service.getPost(postId),
-            service.getComments(postId)
-        ]);
+        try {
+            // 효율적인 비동기 요청
+            const info = await Promise.all([
+                service.getPost(postId),
+                service.getComments(postId)
+            ]);
 
-        // const post = await service.getPost(postId);
-        // console.log(post);
-        // const comments = await service.getComments(postId);
-        // console.log(comments)
-        console.log(info);
+            // const post = await service.getPost(postId);
+            // console.log(post);
+            // const comments = await service.getComments(postId);
+            // console.log(comments)
+            console.log(info);
 
-        // Object destructuring Syntax,
-        // takes out required values and create references to them
-        const {title, body} = info[0].data;
+            // Object destructuring Syntax,
+            // takes out required values and create references to them
+            const {title, body} = info[0].data;
 
-        const comments = info[1].data;
+            const comments = info[1].data;
 
-        this.setState({
-            postId,
-            post: {
-                title,
-                body
-            },
-            comments,
-            fetching: false // done!!
-        });
+            this.setState({
+                postId,
+                post: {
+                    title,
+                    body
+                },
+                comments,
+                fetching: false // done!!
+            });
+        } catch (e) {
+            // if err, stop at this point
+            this.setState({
+                fetching: false
+            });
+            console.log('error occurred', e);
+        }
     }
+
+    handleNavigateClick = (type) => {
+        const postId = this.state.postId;
+
+        if (type === 'NEXT') {
+            this.fetchPostInfo(postId+1);
+        } else {
+            this.fetchPostInfo(postId-1);
+        }
+    };
 
     render() {
         const{postId, fetching, post, comments} = this.state;
@@ -65,6 +83,7 @@ class PostContainers extends Component {
                 <Navigate
                     postId={postId}
                     disabled={fetching}
+                    onClick={this.handleNavigateClick}
                 />
                 <Post
                     title={post.title}
