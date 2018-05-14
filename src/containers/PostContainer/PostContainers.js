@@ -14,7 +14,8 @@ class PostContainers extends Component {
                 title: null,
                 body: null
             },
-            comments: []
+            comments: [],
+            warningVisibility: false
         };
     };
 
@@ -34,11 +35,6 @@ class PostContainers extends Component {
                 service.getPost(postId),
                 service.getComments(postId)
             ]);
-
-            // const post = await service.getPost(postId);
-            // console.log(post);
-            // const comments = await service.getComments(postId);
-            // console.log(comments)
             console.log(info);
 
             // Object destructuring Syntax,
@@ -61,6 +57,7 @@ class PostContainers extends Component {
             this.setState({
                 fetching: false
             });
+            this.showWarning();
             console.log('error occurred', e);
         }
     }
@@ -75,8 +72,25 @@ class PostContainers extends Component {
         }
     };
 
+    showWarning = () => {
+        this.setState({
+            warningVisibility: true
+        });
+
+        // after 1.5sec
+
+        setTimeout(
+            () => {
+                this.setState({
+                    warningVisibility: false
+                })
+            }, 1500
+        );
+    };
+
     render() {
-        const{postId, fetching, post, comments} = this.state;
+        const{postId, fetching, post, comments, warningVisibility} 
+            = this.state;
 
         return (
             <PostWrapper>
@@ -90,7 +104,7 @@ class PostContainers extends Component {
                     body={post.body}
                     comments={comments}
                 />
-                <Warning message="That post does not exist"/>
+                <Warning visible={warningVisibility} message="That post does not exist"/>
             </PostWrapper>
         );
     };
